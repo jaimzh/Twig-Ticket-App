@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{{ title|default('App') }}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* line clamp without plugins */
+    .line-clamp-3 { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-900">
+
+  <div id="toast"
+       class="fixed top-4 right-4 z-50 hidden rounded-md px-4 py-3 text-sm shadow-lg border
+              {% if flash and flash.type == 'success' %} bg-green-50 border-green-200 text-green-800 {% endif %}
+              {% if flash and flash.type == 'error' %} bg-red-50 border-red-200 text-red-800 {% endif %}">
+    {% if flash %}{{ flash.text }}{% endif %}
+  </div>
+
+  {% block body %}{% endblock %}
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      const toast = document.getElementById('toast');
+      if (toast && toast.textContent.trim() !== '') {
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 2200);
+      }
+
+      // Edit modal wiring (Tickets page)
+      const modal = document.getElementById('editModal');
+      const cancelBtn = document.getElementById('editCancel');
+      const form = document.getElementById('editForm');
+      const idInput = document.getElementById('edit-id');
+      const titleInput = document.getElementById('edit-title');
+      const statusInput = document.getElementById('edit-status');
+      const priorityInput = document.getElementById('edit-priority');
+      const descInput = document.getElementById('edit-description');
+
+      function openModal() { if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); } }
+      function closeModal() { if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); } }
+
+      document.querySelectorAll('[data-edit]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const title = btn.getAttribute('data-title') || '';
+          const status = btn.getAttribute('data-status') || 'open';
+          const priority = btn.getAttribute('data-priority') || 'medium';
+          const desc = btn.getAttribute('data-description') || '';
+
+          idInput.value = id;
+          titleInput.value = title;
+          statusInput.value = status;
+          priorityInput.value = priority;
+          descInput.value = desc;
+
+          form.setAttribute('action', `/tickets/${id}/update`);
+          openModal();
+        });
+      });
+
+      if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+      if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    });
+  </script>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

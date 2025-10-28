@@ -1,0 +1,20 @@
+{
+    "name": "you/twig-version",
+    "description": "ticket app",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "You\\TwigVersion\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "jaimz"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "twig/twig": "^3.21"
+    }
+}

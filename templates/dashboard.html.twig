@@ -1,0 +1,58 @@
+{% extends "layouts/base.html.twig" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gray-50">
+  {% include 'layouts/navbar.html.twig' %}
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+      <h1 class="text-4xl mb-2">Dashboard</h1>
+      <p class="text-gray-600">Welcome back! Here's an overview of your tickets.</p>
+    </div>
+
+    {# Stats Grid #}
+    {% set total = tickets|length %}
+    {% set open = tickets|filter(t => t.status == 'open')|length %}
+    {% set in_progress = tickets|filter(t => t.status == 'in_progress')|length %}
+    {% set closed = tickets|filter(t => t.status == 'closed')|length %}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {% include 'partials/stat.html.twig' with {title:'Total Tickets', value: total, icon:'ticket', color:'blue'} %}
+      {% include 'partials/stat.html.twig' with {title:'Open Tickets', value: open, icon:'x-circle', color:'green'} %}
+      {% include 'partials/stat.html.twig' with {title:'In Progress', value: in_progress, icon:'clock', color:'amber'} %}
+      {% include 'partials/stat.html.twig' with {title:'Closed Tickets', value: closed, icon:'check-circle-2', color:'gray'} %}
+    </div>
+
+    {# Recent Activity #}
+    <div class="bg-white border rounded-xl shadow-md mt-6">
+      <div class="p-4 border-b">
+        <h2 class="text-lg font-semibold">Recent Activity</h2>
+        <p class="text-sm text-gray-500">Latest updates on your tickets</p>
+      </div>
+      <div class="p-4">
+        {% if tickets is empty %}
+          <p class="text-gray-500 text-center py-8">No tickets yet. Create your first ticket to get started!</p>
+        {% else %}
+          <div class="space-y-4">
+            {% for t in tickets|slice(0,5) %}
+              <div class="flex items-center justify-between py-3 border-b last:border-b-0">
+                <div>
+                  <p class="text-gray-900">{{ t.title }}</p>
+                  <p class="text-sm text-gray-500">Priority: {{ t.priority }}</p>
+                </div>
+                <span class="px-3 py-1 rounded-full text-sm
+                  {% if t.status == 'open' %} bg-green-100 text-green-700
+                  {% elseif t.status == 'in_progress' %} bg-amber-100 text-amber-700
+                  {% else %} bg-gray-100 text-gray-700 {% endif %}">
+                  {{ t.status|replace({'_':' '}) }}
+                </span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}

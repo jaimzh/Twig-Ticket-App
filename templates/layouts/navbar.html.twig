@@ -1,0 +1,52 @@
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <a href="/dashboard" class="font-semibold text-lg cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        TicketFlow
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a href="/dashboard"
+           class="hover:text-blue-600 transition-colors {{ title == 'Dashboard' ? 'text-blue-600' : 'text-gray-700' }}">
+          Dashboard
+        </a>
+        <a href="/tickets"
+           class="hover:text-blue-600 transition-colors {{ title == 'Tickets' ? 'text-blue-600' : 'text-gray-700' }}">
+          Tickets
+        </a>
+        <form method="post" action="/auth/logout" class="inline">
+          <button class="border border-gray-300 rounded px-4 py-2 hover:bg-gray-50 ml-4 text-gray-800">Logout</button>
+        </form>
+      </nav>
+
+      <!-- Mobile toggle -->
+      <button id="menuBtn" class="md:hidden p-2">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden py-4 border-t border-gray-200">
+      <nav class="flex flex-col gap-4">
+        <a href="/dashboard" class="text-left py-2 px-4 rounded hover:bg-gray-100 {{ title == 'Dashboard' ? 'text-blue-600 bg-blue-50' : 'text-gray-700' }}">Dashboard</a>
+        <a href="/tickets" class="text-left py-2 px-4 rounded hover:bg-gray-100 {{ title == 'Tickets' ? 'text-blue-600 bg-blue-50' : 'text-gray-700' }}">Tickets</a>
+        <form method="post" action="/auth/logout" class="mx-4">
+          <button class="w-full border border-gray-300 rounded px-4 py-2 hover:bg-gray-50 text-gray-800">Logout</button>
+        </form>
+      </nav>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      const btn = document.getElementById("menuBtn");
+      const menu = document.getElementById("mobileMenu");
+      if (btn && menu) {
+        btn.addEventListener("click", () => menu.classList.toggle("hidden"));
+      }
+    });
+  </script>
+</header>
